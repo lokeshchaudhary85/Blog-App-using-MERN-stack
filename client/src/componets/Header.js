@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { authActions, setDarkmode } from "../store";
 import {
@@ -22,7 +22,7 @@ const Header = () => {
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Header = () => {
       setValue(parseInt(savedTab, 10));
     }
     if (savedTheme !== null) {
-      dispatch(setDarkmode(JSON.parse(savedTheme))); 
+      dispatch(setDarkmode(JSON.parse(savedTheme)));
     }
   }, []);
   useEffect(() => {
@@ -45,20 +45,20 @@ const Header = () => {
     } else if (path.startsWith("/blogs")) {
       setValue(0);
     } else {
-      setValue(0); 
+      setValue(0);
     }
   }, [location.pathname]);
 
   const handleTabChange = (e, newValue) => {
     setValue(newValue);
-    localStorage.setItem("selectedTab", newValue); 
+    localStorage.setItem("selectedTab", newValue);
   };
 
   const handleDarkModeToggle = () => {
     const newTheme = !isDark;
-    localStorage.setItem("isDarkMode", newTheme); 
-    dispatch(setDarkmode(newTheme)); 
-  }
+    localStorage.setItem("isDarkMode", newTheme);
+    dispatch(setDarkmode(newTheme));
+  };
 
   const handleLoginClick = () => {
     navigate("/login", { state: { isSignupButtonPressed: false } });
@@ -76,7 +76,7 @@ const Header = () => {
           <Box display="flex" marginLeft={"auto"} marginRight="auto">
             <Tabs
               textColor="inherit"
-              value={value}
+              value={value !== undefined ? value : 0} // ✅ fallback
               onChange={handleTabChange}
             >
               <Tab LinkComponent={Link} to="/blogs" label="All Blogs" />
