@@ -11,7 +11,7 @@ const UpdateBlog = () => {
     title: "",
     desc: "",
     img: ""
-  });
+  }); 
 
   // Fetch blog details on mount
   useEffect(() => {
@@ -36,17 +36,28 @@ const UpdateBlog = () => {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log("Submitting blog:", blog); // 🔹 add this
+  console.log("Submitting blog:", blog);
 
   try {
-    const res = await axios.put(`${config.BASE_URL}/api/blogs/${id}`, blog);
-    console.log("Response from API:", res); // 🔹 add this
+    const res = await axios.put(
+      `${config.BASE_URL}/api/blogs/${id}`,
+      blog,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, //  token add kiya
+        },
+      }
+    );
+
+    console.log("Response from API:", res.data);
     alert("Blog updated successfully!");
-    navigate("/myBlogs"); 
+    navigate("/myBlogs");
   } catch (err) {
-    console.log("Error updating blog:", err); // 🔹 add this
+    console.error("Error updating blog:", err.response?.data || err.message);
+    alert(err.response?.data?.message || "Failed to update blog");
   }
 };
+
 
 
   return (
